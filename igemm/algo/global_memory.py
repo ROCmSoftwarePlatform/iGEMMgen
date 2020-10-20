@@ -151,16 +151,16 @@ class macro_igemm_2d_global_load_t(macro_base_t):
                         if i_d1 == 0 and i_d0 ==  0:
                             self._emit(f"s_mov_b32 s[{self.s_tmp2()}], s[{self.s_stride_d1()}]")
                         elif i_d1 == 0 and i_d0 !=  0:
-                            self._emit(f"s_add_u32 s[{self.s_tmp2()}], s[{self.s_tmp2+1()}], s[{self.s_stride_d1()}]")
+                            self._emit(f"s_add_u32 s[{self.s_tmp2()}], s[{self.s_tmp2()}+1], s[{self.s_stride_d1()}]")
                         else:
                             self._emit(f"s_add_u32 s[{self.s_tmp2()}], s[{self.s_tmp2()}], s[{self.s_stride_d1()}]")
                     i_dst = i_dst + 1
 
                 if i_d0 != (ctrl.length_d0 - 1):
                     if i_d0 == 0:
-                        self._emit(f"s_mov_b32 s[{self.s_tmp2+1()}], s[{self.s_stride_d0()}]")
+                        self._emit(f"s_mov_b32 s[{self.s_tmp2()}+1], s[{self.s_stride_d0()}]")
                     else:
-                        self._emit(f"s_add_u32 s[{self.s_tmp2+1()}], s[{self.s_tmp2+1()}], s[{self.s_stride_d0()}]")
+                        self._emit(f"s_add_u32 s[{self.s_tmp2()}+1], s[{self.s_tmp2()}+1], s[{self.s_stride_d0()}]")
         elif ctrl.src_order == 1 and ctrl.dst_order == 0:
             assert ctrl.vector_d1 == 1, "in such reorder, vector load is meanless"
             for i_d1 in range(ctrl.length_d1):
@@ -176,15 +176,15 @@ class macro_igemm_2d_global_load_t(macro_base_t):
                         if i_d0 == 0 and i_d1 ==  0:
                             self._emit(f"s_mov_b32 s[{self.s_tmp2()}], s[{self.s_stride_d0()}]")
                         elif i_d0 == 0 and i_d1 !=  0:
-                            self._emit(f"s_add_u32 s[{self.s_tmp2()}], s[{self.s_tmp2+1()}], s[{self.s_stride_d0()}]")
+                            self._emit(f"s_add_u32 s[{self.s_tmp2()}], s[{self.s_tmp2()}+1], s[{self.s_stride_d0()}]")
                         else:
                             self._emit(f"s_add_u32 s[{self.s_tmp2()}], s[{self.s_tmp2()}], s[{self.s_stride_d0()}]")
 
                 if i_d1 != (ctrl.length_d1 - 1):
                     if i_d1 == 0:
-                        self._emit(f"s_mov_b32 s[{self.s_tmp2+1()}], s[{self.s_stride_d1()}]")
+                        self._emit(f"s_mov_b32 s[{self.s_tmp2()}+1], s[{self.s_stride_d1()}]")
                     else:
-                        self._emit(f"s_add_u32 s[{self.s_tmp2+1()}], s[{self.s_tmp2+1()}], s[{self.s_stride_d1()}]")
+                        self._emit(f"s_add_u32 s[{self.s_tmp2()}+1], s[{self.s_tmp2()}+1], s[{self.s_stride_d1()}]")
 
         elif ctrl.src_order == 0 and ctrl.dst_order == 1:
             assert False, "un implemented"
